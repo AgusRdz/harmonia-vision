@@ -1,0 +1,8 @@
+services:
+  harmonia-vision:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    stdin_open: true
+    tty: true

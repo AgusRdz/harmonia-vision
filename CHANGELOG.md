@@ -1,0 +1,64 @@
+# Changelog
+
+## [1.0.0] - 2026-01-17
+
+### Added
+
+- **Visual Profile Assessment**
+  - Support for 6 visual conditions:
+    - Myopia (nearsightedness)
+    - Astigmatism
+    - Eye strain / fatigue
+    - Blur / Ghosting
+    - Light sensitivity
+    - Visual crowding
+  - Clear interactive selection states with immediate feedback
+
+- **Prescription Input (Optional)**
+  - Sphere (SPH) and Cylinder (CYL) fields
+  - Decimal validation (up to 2 decimal places)
+  - Tooltips explaining each value and when to use it
+
+- **Recommendation Engine**
+  - Personalized editor setting recommendations based on your selected profile
+  - Conservative, explainable heuristics designed to avoid extreme values
+  - Human-readable rationale per recommended setting
+
+- **Editor Settings Controls**
+  - Font Size (12–32px)
+  - Line Height (Auto–2.2x)
+  - Letter Spacing (0–1.5px)
+  - Font Weight (300–700)
+  - Cursor Width (1–5px)
+
+- **Live Preview**
+  - Side-by-side comparison (Original vs Preview)
+  - Real-time preview updates while adjusting controls
+
+- **Safe Apply Workflow**
+  - Automatic settings snapshot on extension open
+  - Preview button to test settings in the editor
+  - Save button to commit changes
+  - Revert button to restore the last snapshot
+
+- **Internationalization (i18n)**
+  - English support
+  - Spanish support
+  - Auto-detection based on VS Code language
+
+- **Medical Disclaimer**
+  - Clear notice that this extension is not a substitute for professional eye care
+  - Recommendation to consult an optometrist for persistent visual discomfort
+
+- **Modern UI**
+  - Clean, accessible interface built for VS Code Webviews
+  - Theme-aware styling using VS Code CSS variables
+  - Consistent borders, spacing, and focus states
+  - Responsive layout
+
+### Technical
+
+- TypeScript-based implementation
+- Webview panel with Content Security Policy (CSP)
+- Debounced setting updates for responsiveness
+- Snapshot-based settings management (backup/restore)

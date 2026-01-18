@@ -1,0 +1,945 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   Harmonia Vision - Premium UI Design System
+   A carefully crafted interface using VS Code's design language
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   CSS Custom Properties
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+:root {
+  --hv-spacing-xs: 4px;
+  --hv-spacing-sm: 8px;
+  --hv-spacing-md: 16px;
+  --hv-spacing-lg: 24px;
+  --hv-spacing-xl: 32px;
+  --hv-spacing-2xl: 48px;
+
+  --hv-radius-sm: 6px;
+  --hv-radius-md: 10px;
+  --hv-radius-lg: 14px;
+  --hv-radius-full: 9999px;
+
+  --hv-transition-fast: 0.15s ease;
+  --hv-transition-normal: 0.25s ease;
+  --hv-transition-slow: 0.4s ease;
+
+  --hv-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --hv-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --hv-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.15);
+
+  --hv-accent: var(--vscode-button-background);
+  --hv-accent-hover: var(--vscode-button-hoverBackground);
+  --hv-success: #22c55e;
+  --hv-success-soft: rgba(34, 197, 94, 0.15);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Reset & Base Styles
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--vscode-font-family);
+  font-size: var(--vscode-font-size);
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   App Container
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.app {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--hv-spacing-lg);
+  padding-bottom: 100px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Hero Header
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.hero {
+  text-align: center;
+  padding: var(--hv-spacing-xl) 0;
+  margin-bottom: var(--hv-spacing-lg);
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--hv-spacing-md);
+}
+
+.logo {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(
+    135deg,
+    var(--hv-accent),
+    var(--vscode-focusBorder)
+  );
+  border-radius: var(--hv-radius-lg);
+  box-shadow: var(--hv-shadow-md);
+}
+
+.logo-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--vscode-button-foreground);
+}
+
+.hero-title {
+  font-size: 1.75em;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  letter-spacing: -0.02em;
+}
+
+.hero-subtitle {
+  font-size: 0.95em;
+  color: var(--vscode-descriptionForeground);
+  max-width: 300px;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Status Card (Backup Banner)
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.status-card {
+  display: flex;
+  align-items: center;
+  gap: var(--hv-spacing-md);
+  padding: var(--hv-spacing-md) var(--hv-spacing-lg);
+  background: var(--vscode-sideBar-background);
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: var(--hv-radius-md);
+  margin-bottom: var(--hv-spacing-xl);
+}
+
+.status-indicator {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hv-success-soft);
+  border-radius: var(--hv-radius-full);
+}
+
+.status-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--hv-success);
+}
+
+.status-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.status-label {
+  display: block;
+  font-weight: 500;
+  font-size: 0.9em;
+  color: var(--vscode-foreground);
+}
+
+.status-meta {
+  display: block;
+  font-size: 0.8em;
+  color: var(--vscode-descriptionForeground);
+  margin-top: 2px;
+}
+
+.status-values {
+  display: flex;
+  gap: var(--hv-spacing-md);
+  flex-wrap: wrap;
+}
+
+.status-value {
+  text-align: center;
+  padding: var(--hv-spacing-xs) var(--hv-spacing-sm);
+  background: var(--vscode-input-background);
+  border-radius: var(--hv-radius-sm);
+  min-width: 50px;
+}
+
+.value-label {
+  display: block;
+  font-size: 0.7em;
+  color: var(--vscode-descriptionForeground);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.value-number {
+  display: block;
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Main Content
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hv-spacing-lg);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Panel (Card) Styles
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.panel {
+  background: var(--vscode-sideBar-background);
+  border: 1px solid var(--vscode-widget-border);
+  border-radius: var(--hv-radius-lg);
+  padding: var(--hv-spacing-lg);
+  transition: border-color var(--hv-transition-fast);
+}
+
+.panel:hover {
+  border-color: var(--vscode-focusBorder);
+}
+
+.panel-header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--hv-spacing-md);
+  margin-bottom: var(--hv-spacing-lg);
+}
+
+.panel-icon {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--vscode-input-background);
+  border-radius: var(--hv-radius-md);
+  color: var(--vscode-foreground);
+}
+
+.panel-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.panel-icon.accent {
+  background: linear-gradient(
+    135deg,
+    var(--hv-accent),
+    var(--vscode-focusBorder)
+  );
+  color: var(--vscode-button-foreground);
+}
+
+.panel-title-group {
+  flex: 1;
+}
+
+.panel-title {
+  font-size: 1.1em;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+  margin-bottom: 2px;
+}
+
+.panel-description {
+  font-size: 0.85em;
+  color: var(--vscode-descriptionForeground);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Conditions Grid (Diagnostic Checklist)
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.conditions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--hv-spacing-sm);
+  margin-bottom: var(--hv-spacing-lg);
+}
+
+.condition-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--hv-spacing-md);
+  background: var(--vscode-input-background);
+  border: 2px solid transparent;
+  border-radius: var(--hv-radius-md);
+  cursor: pointer;
+  transition: all var(--hv-transition-fast);
+  text-align: center;
+}
+
+.condition-card:hover {
+  border-color: var(--vscode-widget-border);
+  transform: translateY(-2px);
+}
+
+.condition-card.checked {
+  border-color: var(--hv-accent);
+  background: color-mix(in srgb, var(--hv-accent) 10%, transparent);
+}
+
+.condition-card input[type='checkbox'] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.condition-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--hv-spacing-xs);
+}
+
+.condition-icon {
+  width: 32px;
+  height: 32px;
+  color: var(--vscode-descriptionForeground);
+  margin-bottom: var(--hv-spacing-xs);
+  transition: color var(--hv-transition-fast);
+}
+
+.condition-card.checked .condition-icon {
+  color: var(--hv-accent);
+}
+
+.condition-label {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--vscode-foreground);
+}
+
+.condition-hint {
+  font-size: 0.75em;
+  color: var(--vscode-descriptionForeground);
+}
+
+.condition-check {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--hv-accent);
+  border-radius: var(--hv-radius-full);
+  opacity: 0;
+  transform: scale(0.5);
+  transition: all var(--hv-transition-fast);
+}
+
+.condition-check svg {
+  width: 12px;
+  height: 12px;
+  color: var(--vscode-button-foreground);
+}
+
+.condition-card.checked .condition-check {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Prescription Section
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.prescription-section {
+  background: var(--vscode-input-background);
+  border-radius: var(--hv-radius-md);
+  padding: var(--hv-spacing-md);
+  margin-bottom: var(--hv-spacing-lg);
+}
+
+.prescription-header {
+  display: flex;
+  align-items: center;
+  gap: var(--hv-spacing-sm);
+  margin-bottom: var(--hv-spacing-md);
+}
+
+.prescription-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--vscode-descriptionForeground);
+}
+
+.prescription-label {
+  font-size: 0.85em;
+  font-weight: 500;
+  color: var(--vscode-foreground);
+}
+
+.prescription-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--hv-spacing-md);
+}
+
+.input-field label {
+  display: block;
+  font-size: 0.8em;
+  color: var(--vscode-descriptionForeground);
+  margin-bottom: var(--hv-spacing-xs);
+}
+
+.input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-wrapper input {
+  width: 100%;
+  padding: var(--hv-spacing-sm) var(--hv-spacing-md);
+  padding-right: 36px;
+  background: var(--vscode-editor-background);
+  border: 1px solid var(--vscode-input-border, var(--vscode-widget-border));
+  border-radius: var(--hv-radius-sm);
+  color: var(--vscode-input-foreground);
+  font-family: inherit;
+  font-size: 0.95em;
+  transition: border-color var(--hv-transition-fast);
+}
+
+.input-wrapper input:focus {
+  outline: none;
+  border-color: var(--hv-accent);
+}
+
+.input-wrapper input::placeholder {
+  color: var(--vscode-input-placeholderForeground);
+}
+
+.input-unit {
+  position: absolute;
+  right: 12px;
+  font-size: 0.8em;
+  color: var(--vscode-descriptionForeground);
+  pointer-events: none;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Generate Button
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.generate-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--hv-spacing-sm);
+  width: 100%;
+  padding: var(--hv-spacing-md) var(--hv-spacing-lg);
+  background: linear-gradient(
+    135deg,
+    var(--hv-accent),
+    var(--vscode-focusBorder)
+  );
+  color: var(--vscode-button-foreground);
+  border: none;
+  border-radius: var(--hv-radius-md);
+  font-family: inherit;
+  font-size: 0.95em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--hv-transition-fast);
+  box-shadow: var(--hv-shadow-sm);
+}
+
+.generate-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--hv-shadow-md);
+  filter: brightness(1.1);
+}
+
+.generate-btn:active {
+  transform: translateY(0);
+}
+
+.generate-btn .btn-icon {
+  width: 18px;
+  height: 18px;
+}
+
+.generate-btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
+}
+
+.generate-btn.loading .btn-icon {
+  animation: pulse 1s ease infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Recommendations Panel
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.recommendations-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--hv-spacing-xl);
+  text-align: center;
+  color: var(--vscode-descriptionForeground);
+}
+
+.empty-icon {
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--hv-spacing-md);
+  opacity: 0.5;
+}
+
+.recommendations-empty p {
+  font-size: 0.9em;
+  max-width: 280px;
+  line-height: 1.6;
+}
+
+.recommendations-filled {
+  padding: 0;
+}
+
+.recommendations-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hv-spacing-sm);
+}
+
+.recommendation-item {
+  display: flex;
+  gap: var(--hv-spacing-md);
+  padding: var(--hv-spacing-md);
+  background: var(--vscode-input-background);
+  border-radius: var(--hv-radius-md);
+  border-left: 3px solid var(--hv-success);
+  animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.rec-icon {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  color: var(--hv-success);
+}
+
+.rec-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.rec-content {
+  flex: 1;
+}
+
+.rec-content strong {
+  display: block;
+  font-size: 0.9em;
+  color: var(--vscode-foreground);
+  margin-bottom: 2px;
+}
+
+.rec-content p {
+  font-size: 0.85em;
+  color: var(--vscode-descriptionForeground);
+  line-height: 1.5;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Settings Panel
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.settings-grid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hv-spacing-lg);
+}
+
+.setting-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--hv-spacing-sm);
+}
+
+.setting-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.setting-header label {
+  font-size: 0.9em;
+  font-weight: 500;
+  color: var(--vscode-foreground);
+}
+
+.setting-value {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: var(--hv-accent);
+  background: color-mix(in srgb, var(--hv-accent) 15%, transparent);
+  padding: var(--hv-spacing-xs) var(--hv-spacing-sm);
+  border-radius: var(--hv-radius-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider-container {
+  position: relative;
+  height: 8px;
+}
+
+.slider {
+  --slider-percent: 10%;
+  width: 100%;
+  height: 8px;
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(
+    to right,
+    var(--hv-accent) var(--slider-percent),
+    var(--vscode-scrollbarSlider-background) var(--slider-percent)
+  );
+  border-radius: var(--hv-radius-full);
+  outline: none;
+  cursor: pointer;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--hv-radius-full);
+  background: var(--vscode-button-foreground);
+  border: 3px solid var(--hv-accent);
+  cursor: pointer;
+  box-shadow: var(--hv-shadow-md);
+  transition: transform var(--hv-transition-fast);
+}
+
+.slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+}
+
+.slider::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--hv-radius-full);
+  background: var(--vscode-button-foreground);
+  border: 3px solid var(--hv-accent);
+  cursor: pointer;
+  box-shadow: var(--hv-shadow-md);
+}
+
+.setting-range {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75em;
+  color: var(--vscode-descriptionForeground);
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Preview Panel
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.preview-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--hv-spacing-md);
+}
+
+.preview-card {
+  border-radius: var(--hv-radius-md);
+  overflow: hidden;
+  border: 1px solid var(--vscode-widget-border);
+  background: var(--vscode-editor-background);
+}
+
+.preview-card.original {
+  opacity: 0.7;
+}
+
+.preview-card.modified {
+  border-color: var(--hv-accent);
+  box-shadow: 0 0 0 1px var(--hv-accent);
+}
+
+.preview-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--hv-spacing-sm) var(--hv-spacing-md);
+  background: var(--vscode-sideBarSectionHeader-background);
+  border-bottom: 1px solid var(--vscode-widget-border);
+}
+
+.preview-label {
+  font-size: 0.8em;
+  font-weight: 600;
+  color: var(--vscode-foreground);
+}
+
+.preview-badge {
+  font-size: 0.65em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 3px 8px;
+  background: var(--hv-success);
+  color: white;
+  border-radius: var(--hv-radius-full);
+}
+
+.preview-code {
+  margin: 0;
+  padding: var(--hv-spacing-md);
+  font-family: var(--vscode-editor-font-family, 'Consolas', monospace);
+  font-size: 13px;
+  line-height: 1.5;
+  overflow-x: auto;
+  min-height: 180px;
+  color: var(--vscode-editor-foreground);
+}
+
+.preview-code code {
+  font-family: inherit;
+  white-space: pre;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Floating Action Bar
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+.action-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: var(--hv-spacing-md);
+  padding: var(--hv-spacing-md) var(--hv-spacing-lg);
+  background: linear-gradient(
+    to top,
+    var(--vscode-editor-background) 80%,
+    transparent
+  );
+  backdrop-filter: blur(8px);
+  z-index: 100;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--hv-spacing-sm);
+  padding: var(--hv-spacing-md) var(--hv-spacing-xl);
+  border: none;
+  border-radius: var(--hv-radius-md);
+  font-family: inherit;
+  font-size: 0.9em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--hv-transition-fast);
+}
+
+.action-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+.action-btn.primary {
+  background: linear-gradient(
+    135deg,
+    var(--hv-accent),
+    var(--vscode-focusBorder)
+  );
+  color: var(--vscode-button-foreground);
+  box-shadow: var(--hv-shadow-md);
+}
+
+.action-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--hv-shadow-lg);
+}
+
+.action-btn.secondary {
+  background: var(--vscode-button-secondaryBackground);
+  color: var(--vscode-button-secondaryForeground);
+}
+
+.action-btn.secondary:hover:not(:disabled) {
+  background: var(--vscode-button-secondaryHoverBackground);
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Responsive Design
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+@media (max-width: 600px) {
+  .app {
+    padding: var(--hv-spacing-md);
+  }
+
+  .hero {
+    padding: var(--hv-spacing-lg) 0;
+  }
+
+  .logo {
+    width: 48px;
+    height: 48px;
+  }
+
+  .logo-icon {
+    width: 28px;
+    height: 28px;
+  }
+
+  .hero-title {
+    font-size: 1.5em;
+  }
+
+  .status-card {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--hv-spacing-sm);
+  }
+
+  .status-values {
+    width: 100%;
+  }
+
+  .conditions-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .prescription-inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .preview-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .action-bar {
+    flex-direction: column;
+    padding: var(--hv-spacing-md);
+  }
+
+  .action-btn {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 400px) {
+  .conditions-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .condition-card {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--hv-spacing-md);
+  }
+
+  .condition-content {
+    align-items: flex-start;
+  }
+
+  .condition-icon {
+    margin-bottom: 0;
+  }
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   Accessibility
+   ─────────────────────────────────────────────────────────────────────────────*/
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Focus states */
+.condition-card:focus-within {
+  outline: 2px solid var(--hv-accent);
+  outline-offset: 2px;
+}
+
+.input-wrapper input:focus,
+.slider:focus {
+  outline: 2px solid var(--hv-accent);
+  outline-offset: 2px;
+}
+
+.action-btn:focus,
+.generate-btn:focus {
+  outline: 2px solid var(--vscode-focusBorder);
+  outline-offset: 2px;
+}

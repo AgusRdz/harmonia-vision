@@ -1,0 +1,60 @@
+{
+  "activationEvents": [],
+  "categories": [
+    "Other"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "harmoniaVision.openCalibrator",
+        "title": "Harmonia Vision: Open Calibrator"
+      }
+    ]
+  },
+  "description": "Calibrate editor readability and reduce visual fatigue through ergonomic configuration recommendations",
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "eslint": "^8.54.0",
+    "prettier": "^3.6.2",
+    "typescript": "^5.3.0"
+  },
+  "displayName": "Harmonia Vision",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "icon": "icon.png",
+  "keywords": [
+    "accessibility",
+    "a11y",
+    "ergonomics",
+    "eye strain",
+    "visual comfort",
+    "readability",
+    "productivity",
+    "typography",
+    "font size",
+    "line height",
+    "letter spacing",
+    "cursor",
+    "myopia",
+    "astigmatism",
+    "ghosting",
+    "harmonia"
+  ],
+  "license": "MIT",
+  "main": "./out/extension.js",
+  "name": "harmonia-vision",
+  "publisher": "AgusRdz",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AgusRdz/harmonia-vision"
+  },
+  "scripts": {
+    "compile": "tsc -p ./",
+    "lint": "eslint src --ext ts",
+    "vscode:prepublish": "npm run compile",
+    "watch": "tsc -watch -p ./"
+  },
+  "version": "1.0.0"
+}
