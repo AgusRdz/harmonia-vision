@@ -6,7 +6,7 @@ import {
     RecommendationOutput,
     EditorSettings,
 } from '../logic/recommendations';
-import { SettingsManager, EditorSettingsSnapshot, LineHighlightType } from '../logic/settingsManager';
+import { SettingsManager, EditorSettingsSnapshot, LineHighlightType, PrescriptionData } from '../logic/settingsManager';
 import { PauseManager, PauseSettings, PauseState } from '../logic/pauseManager';
 import { debounce } from '../utils/throttle';
 import { getTranslations } from '../i18n/translations';
@@ -56,13 +56,14 @@ export class CalibratorPanel implements vscode.Disposable {
         this._settingsManager = new SettingsManager(context.globalState);
         this._pauseManager = pauseManager;
 
-        // Create debounced apply function
+        // Create debounced apply function (150ms for snappier feel)
         this._debouncedApply = debounce(
             (settings: EditorSettingsSnapshot) => this._executeApply(settings),
-            200
+            150
         );
 
-        // Capture initial snapshot if none exists
+        // Auto-capture snapshot on panel open - this is the safety net for revert
+        // Users can always go back to where they started
         this._initializeSnapshot();
 
         this._update();
@@ -75,7 +76,8 @@ export class CalibratorPanel implements vscode.Disposable {
                     // Do NOT call _update() here - it regenerates HTML and destroys state
                     // retainContextWhenHidden: true preserves the webview state
                     // Only resend state data (not regenerate HTML)
-                    this._sendFullStateToWebview();
+                    // Skip slider update - sliders are independent and preserved by retainContextWhenHidden
+                    this._sendFullStateToWebview(true);
                 }
             },
             null,
@@ -96,7 +98,9 @@ export class CalibratorPanel implements vscode.Disposable {
                 return;
             }
             if (e.affectsConfiguration('editor')) {
-                this._sendCurrentSettingsToWebview();
+                // When settings.json is modified externally, update the Current Settings display
+                // but DO NOT update sliders - they're independent once panel is opened
+                this._sendFullStateToWebview(true);
             }
         });
         this._disposables.push(configListener);
@@ -108,11 +112,6 @@ export class CalibratorPanel implements vscode.Disposable {
             });
             this._disposables.push(pauseListener);
         }
-    }
-
-    private async _initializeSnapshot(): Promise<void> {
-        // Capture snapshot on first use (doesn't overwrite existing)
-        await this._settingsManager.captureSnapshot(false);
     }
 
     public static createOrShow(
@@ -159,6 +158,16 @@ export class CalibratorPanel implements vscode.Disposable {
         }
     }
 
+    /**
+     * Captures a snapshot of current settings when panel opens.
+     * This is the safety net - users can always revert to where they started.
+     */
+    private async _initializeSnapshot(): Promise<void> {
+        // Always capture a fresh snapshot when panel opens
+        // This ensures users can revert to their starting point
+        await this._settingsManager.captureSnapshot(true);
+    }
+
     private _update(): void {
         const webview = this._panel.webview;
         const translations = getTranslations(vscode.env.language);
@@ -199,6 +208,12 @@ export class CalibratorPanel implements vscode.Disposable {
             case 'recaptureSnapshot':
                 this._handleRecaptureSnapshot();
                 break;
+            case 'createSnapshot':
+                this._handleCreateSnapshot();
+                break;
+            case 'deleteSnapshot':
+                this._handleDeleteSnapshot();
+                break;
             case 'getInitialState':
                 this._sendFullStateToWebview();
                 break;
@@ -222,6 +237,15 @@ export class CalibratorPanel implements vscode.Disposable {
                     this._handleUpdateTimerVisibility(message.payload);
                 }
                 break;
+            // Prescription persistence
+            case 'savePrescription':
+                if (message.payload && this._isPrescriptionPayload(message.payload)) {
+                    this._handleSavePrescription(message.payload);
+                }
+                break;
+            case 'clearPrescription':
+                this._handleClearPrescription();
+                break;
         }
     }
 
@@ -237,10 +261,16 @@ export class CalibratorPanel implements vscode.Disposable {
         return typeof payload === 'object' && payload !== null;
     }
 
+    private _isPrescriptionPayload(payload: unknown): payload is PrescriptionData {
+        return typeof payload === 'object' && payload !== null && 'rememberMe' in payload;
+    }
+
     private _computeAndSendRecommendations(input: RecommendationInput): void {
         try {
-            // Inject current settings as baseline floor
+            // Use current settings.json values as baseline for recommendations
+            // User has explicit control over snapshot - it's only for revert functionality
             const currentSettings = this._settingsManager.readCurrentSettings();
+
             const inputWithCurrentSettings: RecommendationInput = {
                 ...input,
                 currentSettings: {
@@ -253,6 +283,7 @@ export class CalibratorPanel implements vscode.Disposable {
             };
 
             const recommendations: RecommendationOutput = computeRecommendations(inputWithCurrentSettings);
+
             this._panel.webview.postMessage({
                 command: 'recommendations',
                 payload: recommendations,
@@ -270,10 +301,11 @@ export class CalibratorPanel implements vscode.Disposable {
 
     private async _handlePreviewSettings(settings: SettingsPayload): Promise<void> {
         // Preview action - apply to GLOBAL settings for testing (snapshot unchanged)
+        // Silent operation: no info message for snappier feel, webview already does optimistic UI updates
         const result = await this._settingsManager.applySettings(this._convertToSnapshot(settings), false);
         if (result.success) {
             this._sendFullStateToWebview();
-            vscode.window.showInformationMessage('Harmonia Vision: Preview applied. Click "Save" to keep these settings.');
+            // No info message - preview should be silent and fast
         } else {
             vscode.window.showErrorMessage(`Failed to apply preview: ${result.error}`);
         }
@@ -305,8 +337,9 @@ export class CalibratorPanel implements vscode.Disposable {
         const result = await this._settingsManager.revert();
 
         if (result.success) {
-            this._sendFullStateToWebview();
-            vscode.window.showInformationMessage('Harmonia Vision: Settings reverted to original snapshot.');
+            // Send state update but don't touch sliders - they're user-controlled
+            this._sendFullStateToWebview(true);
+            vscode.window.showInformationMessage('Harmonia Vision: Settings reverted.');
         } else {
             vscode.window.showErrorMessage(`Failed to revert: ${result.error}`);
         }
@@ -316,7 +349,8 @@ export class CalibratorPanel implements vscode.Disposable {
         const result = await this._settingsManager.revertAndClear();
 
         if (result.success) {
-            this._sendFullStateToWebview();
+            // Skip slider update - sliders are independent
+            this._sendFullStateToWebview(true);
             vscode.window.showInformationMessage('Harmonia Vision: Settings reverted and snapshot cleared.');
         } else {
             vscode.window.showErrorMessage(`Failed to revert: ${result.error}`);
@@ -325,8 +359,33 @@ export class CalibratorPanel implements vscode.Disposable {
 
     private async _handleRecaptureSnapshot(): Promise<void> {
         await this._settingsManager.captureSnapshot(true); // Force recapture
-        this._sendFullStateToWebview();
-        vscode.window.showInformationMessage('Harmonia Vision: New snapshot captured from current settings.');
+        // Skip slider update - just updating snapshot, sliders are independent
+        this._sendFullStateToWebview(true);
+        vscode.window.showInformationMessage('Harmonia Vision: Snapshot updated from current settings.');
+    }
+
+    private async _handleCreateSnapshot(): Promise<void> {
+        await this._settingsManager.captureSnapshot(true);
+        // Skip slider update - just creating snapshot, sliders are independent
+        this._sendFullStateToWebview(true);
+        vscode.window.showInformationMessage('Harmonia Vision: Snapshot created. You can now revert to these settings anytime.');
+    }
+
+    private async _handleDeleteSnapshot(): Promise<void> {
+        await this._settingsManager.clearSnapshot();
+        // Skip slider update - just deleting snapshot, sliders are independent
+        this._sendFullStateToWebview(true);
+        vscode.window.showInformationMessage('Harmonia Vision: Snapshot deleted.');
+    }
+
+    private async _handleSavePrescription(prescription: PrescriptionData): Promise<void> {
+        await this._settingsManager.savePrescription(prescription);
+    }
+
+    private async _handleClearPrescription(): Promise<void> {
+        await this._settingsManager.clearPrescription();
+        // Skip slider update - just clearing prescription, sliders are independent
+        this._sendFullStateToWebview(true);
     }
 
     private _convertToSnapshot(settings: SettingsPayload): EditorSettingsSnapshot {
@@ -353,12 +412,13 @@ export class CalibratorPanel implements vscode.Disposable {
         return config.get<'always' | 'auto' | 'hidden'>('statusBar.timerVisibility', 'auto');
     }
 
-    private _sendFullStateToWebview(): void {
+    private _sendFullStateToWebview(skipSliderUpdate: boolean = false): void {
         const current = this._settingsManager.readCurrentSettings();
         const snapshot = this._settingsManager.getSnapshot();
         const snapshotAge = this._settingsManager.getSnapshotAge();
         const hasSnapshot = this._settingsManager.hasSnapshot();
         const timerVisibility = this._getTimerVisibility();
+        const prescription = this._settingsManager.getSavedPrescription();
 
         this._panel.webview.postMessage({
             command: 'fullState',
@@ -368,6 +428,8 @@ export class CalibratorPanel implements vscode.Disposable {
                 snapshotAge,
                 hasSnapshot,
                 timerVisibility,
+                prescription,
+                skipSliderUpdate,
             },
         });
 

@@ -202,30 +202,69 @@ export function getWebviewContent(
         </div>
     </div>
 
-    <!-- Backup Status -->
-    <div class="flex items-center gap-4 p-4 mb-6 rounded-lg border border-vscode-border bg-vscode-sidebar">
-        <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
-            <svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-            </svg>
+    <!-- Current Settings & Snapshot Status -->
+    <div class="mb-6 p-4 rounded-lg border border-vscode-border bg-vscode-sidebar">
+        <!-- Current Settings Row -->
+        <div class="flex items-center gap-4 mb-4">
+            <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                </svg>
+            </div>
+            <div class="flex-1">
+                <span class="font-medium text-sm block">${t.currentSettings}</span>
+                <span class="text-xs text-vscode-muted">${t.currentSettingsDesc}</span>
+            </div>
+            <div class="flex gap-2 text-xs">
+                <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
+                    <span class="block text-vscode-muted uppercase text-[10px]">${t.size}</span>
+                    <span class="font-semibold text-blue-400" id="currentFontSize">--</span>
+                </div>
+                <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
+                    <span class="block text-vscode-muted uppercase text-[10px]">${t.height}</span>
+                    <span class="font-semibold text-blue-400" id="currentLineHeight">--</span>
+                </div>
+                <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
+                    <span class="block text-vscode-muted uppercase text-[10px]">${t.weight}</span>
+                    <span class="font-semibold text-blue-400" id="currentFontWeight">--</span>
+                </div>
+            </div>
         </div>
-        <div class="flex-1">
-            <span class="font-medium text-sm block">${t.lastSavedSettings}</span>
-            <span class="text-xs text-vscode-muted" id="snapshotAge"></span>
-        </div>
-        <div class="flex gap-3 text-xs">
-            <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
-                <span class="block text-vscode-muted uppercase text-[10px]">${t.size}</span>
-                <span class="font-semibold" id="origFontSize">--</span>
+
+        <!-- Divider -->
+        <div class="border-t border-gray-500/20 my-3"></div>
+
+        <!-- Revert Point Row -->
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
+                <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/>
+                </svg>
             </div>
-            <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
-                <span class="block text-vscode-muted uppercase text-[10px]">${t.height}</span>
-                <span class="font-semibold" id="origLineHeight">--</span>
+            <div class="flex-1">
+                <span class="font-medium text-sm block">${t.snapshotStatus}</span>
+                <span class="text-xs text-vscode-muted">${t.snapshotAutoCapture}</span>
             </div>
-            <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
-                <span class="block text-vscode-muted uppercase text-[10px]">${t.weight}</span>
-                <span class="font-semibold" id="origFontWeight">--</span>
+            <!-- Snapshot values -->
+            <div id="snapshotValues" class="flex gap-2 text-xs">
+                <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
+                    <span class="block text-vscode-muted uppercase text-[10px]">${t.size}</span>
+                    <span class="font-semibold text-green-400" id="snapshotFontSize">--</span>
+                </div>
+                <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
+                    <span class="block text-vscode-muted uppercase text-[10px]">${t.height}</span>
+                    <span class="font-semibold text-green-400" id="snapshotLineHeight">--</span>
+                </div>
+                <div class="text-center px-2 py-1 bg-vscode-input-bg rounded">
+                    <span class="block text-vscode-muted uppercase text-[10px]">${t.weight}</span>
+                    <span class="font-semibold text-green-400" id="snapshotFontWeight">--</span>
+                </div>
             </div>
+            <!-- Update button -->
+            <button id="updateSnapshotBtn" class="text-xs px-3 py-1.5 bg-vscode-input-bg text-vscode-fg rounded hover:opacity-80 transition-opacity bordered" title="${t.snapshotUpdateTooltip}">
+                ${t.snapshotUpdate}
+            </button>
         </div>
     </div>
 
@@ -348,6 +387,16 @@ export function getWebviewContent(
                         <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-vscode-muted pointer-events-none">D</span>
                     </div>
                 </div>
+            </div>
+            <!-- Remember Prescription Toggle -->
+            <div class="mt-3 pt-3 border-t border-gray-500/20">
+                <label class="flex items-center justify-between cursor-pointer">
+                    <span class="text-xs text-vscode-muted">${t.prescriptionRemember}</span>
+                    <div class="relative">
+                        <input type="checkbox" id="rememberPrescription" class="sr-only peer">
+                        <div class="w-9 h-5 bg-gray-600 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-vscode-btn"></div>
+                    </div>
+                </label>
             </div>
         </div>
 
@@ -633,7 +682,7 @@ export function getWebviewContent(
     <!-- Action Bar -->
     <div class="fixed bottom-0 left-0 right-0 p-4 bg-vscode-bg border-t border-vscode-border">
         <div class="flex justify-center gap-2 max-w-lg mx-auto">
-            <button id="revertBtn" disabled class="bordered py-3 px-4 bg-vscode-input-bg text-vscode-fg rounded-lg font-medium text-sm hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+            <button id="revertBtn" disabled title="${t.revertTooltip}" class="bordered py-3 px-4 bg-vscode-input-bg text-vscode-fg rounded-lg font-medium text-sm hover:opacity-80 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12a9 9 0 109-9 9.75 9.75 0 00-6.74 2.74L3 8"/>
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3v5h5"/>
@@ -647,7 +696,7 @@ export function getWebviewContent(
                 </svg>
                 ${t.preview}
             </button>
-            <button id="saveBtn" class="bordered py-3 px-5 bg-vscode-btn text-vscode-btn-fg rounded-lg font-medium text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
+            <button id="saveBtn" title="${t.saveTooltip}" class="bordered py-3 px-5 bg-vscode-btn text-vscode-btn-fg rounded-lg font-medium text-sm hover:opacity-90 transition-opacity flex items-center justify-center gap-2">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
                 </svg>
@@ -660,7 +709,7 @@ export function getWebviewContent(
         const vscode = acquireVsCodeApi();
         const translations = ${JSON.stringify(t.settingNames)};
 
-        let originalSettings = null;
+        let snapshotSettings = null;
         let currentSettings = null;
 
         const toggleIds = ['myopia', 'astigmatism', 'photophobia', 'eyeStrain', 'blurGhosting', 'crowding'];
@@ -671,9 +720,12 @@ export function getWebviewContent(
         const saveBtn = document.getElementById('saveBtn');
         const revertBtn = document.getElementById('revertBtn');
         const recommendationsContent = document.getElementById('recommendationsContent');
-        const snapshotAgeEl = document.getElementById('snapshotAge');
         const originalPreview = document.getElementById('originalPreview');
         const previewCode = document.getElementById('previewCode');
+
+        // Snapshot UI elements
+        const snapshotValues = document.getElementById('snapshotValues');
+        const updateSnapshotBtn = document.getElementById('updateSnapshotBtn');
 
         function getLineHeightDisplay(value) {
             if (value === 0 || value === undefined || value === null) return '${t.auto}';
@@ -707,11 +759,22 @@ export function getWebviewContent(
             }
         }
 
-        function updateOriginalSettingsDisplay(settings) {
+        function updateCurrentSettingsDisplay(settings) {
             if (!settings) return;
-            document.getElementById('origFontSize').textContent = (settings.fontSize || 14) + 'px';
-            document.getElementById('origLineHeight').textContent = getLineHeightDisplay(settings.lineHeight);
-            document.getElementById('origFontWeight').textContent = settings.fontWeight === 'normal' ? '400' : (settings.fontWeight || '400');
+            document.getElementById('currentFontSize').textContent = (settings.fontSize || 14) + 'px';
+            document.getElementById('currentLineHeight').textContent = getLineHeightDisplay(settings.lineHeight);
+            document.getElementById('currentFontWeight').textContent = settings.fontWeight === 'normal' ? '400' : (settings.fontWeight || '400');
+        }
+
+        function updateSnapshotDisplay(snapshot) {
+            // Snapshot is always auto-captured on panel open
+            if (snapshot) {
+                document.getElementById('snapshotFontSize').textContent = (snapshot.fontSize || 14) + 'px';
+                document.getElementById('snapshotLineHeight').textContent = getLineHeightDisplay(snapshot.lineHeight);
+                document.getElementById('snapshotFontWeight').textContent = snapshot.fontWeight === 'normal' ? '400' : (snapshot.fontWeight || '400');
+            }
+            // Revert is always available since snapshot is auto-captured
+            revertBtn.disabled = false;
         }
 
         function applyStylesToPreview(container, fontSize, lineHeight, fontWeight, letterSpacing, lineHighlight) {
@@ -723,12 +786,14 @@ export function getWebviewContent(
         }
 
         function updateComparisonPreview() {
-            if (originalSettings) {
-                const fs = originalSettings.fontSize || 14;
-                const lh = originalSettings.lineHeight;
-                const wt = originalSettings.fontWeight || 'normal';
-                const sp = originalSettings.letterSpacing || 0;
-                const hl = originalSettings.renderLineHighlight || 'all';
+            // Original preview shows snapshot if exists, otherwise current settings
+            const baseSettings = snapshotSettings || currentSettings;
+            if (baseSettings) {
+                const fs = baseSettings.fontSize || 14;
+                const lh = baseSettings.lineHeight;
+                const wt = baseSettings.fontWeight || 'normal';
+                const sp = baseSettings.letterSpacing || 0;
+                const hl = baseSettings.renderLineHighlight || 'all';
                 applyStylesToPreview(originalPreview, fs, lh, wt, sp, hl);
             }
             const s = collectSliderSettings();
@@ -806,15 +871,50 @@ export function getWebviewContent(
         }
 
         function handleFullState(payload) {
-            originalSettings = payload.snapshot || payload.current;
+            snapshotSettings = payload.snapshot;
             currentSettings = payload.current;
-            updateOriginalSettingsDisplay(originalSettings);
-            if (payload.snapshotAge) snapshotAgeEl.textContent = payload.snapshotAge;
-            revertBtn.disabled = !payload.hasSnapshot;
-            applySettingsToSliders(payload.current);
+
+            // Update displays
+            updateCurrentSettingsDisplay(payload.current);
+            updateSnapshotDisplay(payload.snapshot);
+
+            // Only apply settings to sliders if not skipping (e.g., after revert we keep slider values)
+            if (!payload.skipSliderUpdate) {
+                applySettingsToSliders(payload.current);
+            }
+
+            // Update comparison preview
+            updateComparisonPreview();
+
             // Set timer visibility dropdown
             if (payload.timerVisibility && timerVisibilitySelect) {
                 timerVisibilitySelect.value = payload.timerVisibility;
+            }
+
+            // Load saved prescription and visual profile
+            if (payload.prescription) {
+                const sphereEl = document.getElementById('sphere');
+                const cylinderEl = document.getElementById('cylinder');
+                const rememberEl = document.getElementById('rememberPrescription');
+                if (sphereEl && payload.prescription.sphere !== null) {
+                    sphereEl.value = payload.prescription.sphere.toString();
+                }
+                if (cylinderEl && payload.prescription.cylinder !== null) {
+                    cylinderEl.value = payload.prescription.cylinder.toString();
+                }
+                if (rememberEl) {
+                    rememberEl.checked = payload.prescription.rememberMe;
+                }
+                // Restore visual profile toggles
+                if (payload.prescription.toggles) {
+                    const toggles = payload.prescription.toggles;
+                    toggleIds.forEach(function(id) {
+                        const el = document.getElementById(id);
+                        if (el && toggles[id] !== undefined) {
+                            el.checked = toggles[id];
+                        }
+                    });
+                }
             }
         }
 
@@ -823,15 +923,22 @@ export function getWebviewContent(
         });
 
         previewBtn.addEventListener('click', () => {
-            vscode.postMessage({ command: 'previewSettings', payload: collectSliderSettings() });
+            const settings = collectSliderSettings();
+            vscode.postMessage({ command: 'previewSettings', payload: settings });
         });
 
         saveBtn.addEventListener('click', () => {
-            vscode.postMessage({ command: 'saveSettings', payload: collectSliderSettings() });
+            const settings = collectSliderSettings();
+            vscode.postMessage({ command: 'saveSettings', payload: settings });
         });
 
         revertBtn.addEventListener('click', () => {
             vscode.postMessage({ command: 'revert' });
+        });
+
+        // Update snapshot button
+        updateSnapshotBtn.addEventListener('click', () => {
+            vscode.postMessage({ command: 'createSnapshot' });
         });
 
         sliderIds.forEach(id => {
@@ -914,6 +1021,68 @@ export function getWebviewContent(
         const cylinderInput = document.getElementById('cylinder');
         if (sphereInput) validateDecimalInput(sphereInput);
         if (cylinderInput) validateDecimalInput(cylinderInput);
+
+        // ─────────────────────────────────────────────────────────────────────
+        // Prescription & Visual Profile Persistence
+        // ─────────────────────────────────────────────────────────────────────
+
+        const rememberPrescriptionCheckbox = document.getElementById('rememberPrescription');
+
+        function collectVisualToggles() {
+            return {
+                myopia: document.getElementById('myopia')?.checked || false,
+                astigmatism: document.getElementById('astigmatism')?.checked || false,
+                eyeStrain: document.getElementById('eyeStrain')?.checked || false,
+                blurGhosting: document.getElementById('blurGhosting')?.checked || false,
+                photophobia: document.getElementById('photophobia')?.checked || false,
+                crowding: document.getElementById('crowding')?.checked || false,
+            };
+        }
+
+        function saveProfileIfRemember() {
+            if (!rememberPrescriptionCheckbox) return;
+            vscode.postMessage({
+                command: 'savePrescription',
+                payload: {
+                    sphere: sphereInput && sphereInput.value ? parseFloat(sphereInput.value) : null,
+                    cylinder: cylinderInput && cylinderInput.value ? parseFloat(cylinderInput.value) : null,
+                    toggles: collectVisualToggles(),
+                    rememberMe: rememberPrescriptionCheckbox.checked,
+                }
+            });
+        }
+
+        if (rememberPrescriptionCheckbox) {
+            rememberPrescriptionCheckbox.addEventListener('change', saveProfileIfRemember);
+        }
+
+        // Save on blur/change if remember is checked
+        if (sphereInput) {
+            sphereInput.addEventListener('blur', function() {
+                if (rememberPrescriptionCheckbox && rememberPrescriptionCheckbox.checked) {
+                    saveProfileIfRemember();
+                }
+            });
+        }
+        if (cylinderInput) {
+            cylinderInput.addEventListener('blur', function() {
+                if (rememberPrescriptionCheckbox && rememberPrescriptionCheckbox.checked) {
+                    saveProfileIfRemember();
+                }
+            });
+        }
+
+        // Save when any toggle checkbox changes (if remember is checked)
+        toggleIds.forEach(function(id) {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('change', function() {
+                    if (rememberPrescriptionCheckbox && rememberPrescriptionCheckbox.checked) {
+                        saveProfileIfRemember();
+                    }
+                });
+            }
+        });
 
         // ─────────────────────────────────────────────────────────────────────
         // Pause Feature UI

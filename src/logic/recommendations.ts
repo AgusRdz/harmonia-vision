@@ -102,7 +102,7 @@ const MYOPIA_THRESHOLDS = {
 };
 
 const MIN_FONT_SIZE = 12;
-const MAX_FONT_SIZE = 32;
+const MAX_FONT_SIZE = 28;  // Reduced from 32 to prevent over-scaling
 const MIN_LINE_HEIGHT_RATIO = 1.4;
 const MAX_LINE_HEIGHT_RATIO = 2.0;
 const DEFAULT_LINE_HEIGHT_RATIO = 1.5;
@@ -489,7 +489,7 @@ export function runSelfChecks(): { passed: boolean; results: string[] } {
         },
     };
     const extremeOutput = computeRecommendations(extremeInput);
-    check('Extreme: fontSize <= 32', extremeOutput.settings.fontSize <= MAX_FONT_SIZE);
+    check('Extreme: fontSize <= 28', extremeOutput.settings.fontSize <= MAX_FONT_SIZE);
     check('Extreme: letterSpacing <= 1.5', extremeOutput.settings.letterSpacing <= MAX_LETTER_SPACING);
     check('Extreme: cursorWidth <= 5', extremeOutput.settings.cursorWidth <= 5);
 

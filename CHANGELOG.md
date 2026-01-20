@@ -1,5 +1,60 @@
 # Changelog
 
+## [1.4.1] - 2026-01-20
+
+### Fixed
+
+- **Deterministic Recommendations**
+  - Recommendations now use current settings.json values as baseline
+  - Prevents "runaway" recommendations where previewed values compound on each generation
+  - Font size recommendations are now consistent and reproducible
+
+- **Preview Performance**
+  - Reduced debounce from 200ms to 150ms for snappier preview updates
+  - Preview is now silent (no info message) for smoother UX
+
+- **Recommendation Engine**
+  - Reduced MAX_FONT_SIZE from 32 to 28 to prevent over-scaling
+  - Cursor width now properly recommended for myopia with sphere >= 2.0
+
+- **Independent Sliders**
+  - Sliders now load settings.json values only on panel open
+  - After initial load, sliders are independent and user-controlled
+  - Revert restores settings.json but preserves current slider/recommendation values
+  - Switching tabs no longer resets slider values
+
+### Changed
+
+- **Snapshot Management**
+  - Snapshot (now called "Revert Point") is auto-captured when panel opens
+  - Users can always revert to their starting point - no manual setup required
+  - "Update" button available to refresh revert point to current settings
+  - Clear visual distinction between "Current Settings" (blue) and "Revert Point" (green)
+  - Panel reflects settings.json changes immediately (live sync)
+
+### Added
+
+- **Simplified Revert Point UI**
+  - Shows current settings vs revert point values side-by-side
+  - "Update" button to refresh revert point when needed
+  - Revert always available - users can always go back to where they started
+
+- **Prescription Persistence**
+  - "Remember my prescription" toggle to save prescription locally
+  - Visual profile toggles (myopia, astigmatism, etc.) also saved when enabled
+  - Data stored in extension's local storage (privacy-first)
+
+- **Button Tooltips**
+  - Revert button: explains it restores to starting values
+  - Save button: clarifies it updates the revert point to new values
+
+- **New Translations**
+  - Added snapshot management strings (EN/ES)
+  - Added prescription persistence strings (EN/ES)
+  - Added button tooltip strings (EN/ES)
+
+---
+
 ## [1.4.0] - 2026-01-20
 
 ### Added

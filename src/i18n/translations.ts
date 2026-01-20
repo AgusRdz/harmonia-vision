@@ -10,8 +10,13 @@ export interface Translations {
     title: string;
     subtitle: string;
 
-    // Backup status
-    lastSavedSettings: string;
+    // Current Settings & Snapshot
+    currentSettings: string;
+    currentSettingsDesc: string;
+    snapshotStatus: string;
+    snapshotAutoCapture: string;
+    snapshotUpdate: string;
+    snapshotUpdateTooltip: string;
     size: string;
     height: string;
     weight: string;
@@ -41,6 +46,8 @@ export interface Translations {
     sphereTooltip: string;
     cylinder: string;
     cylinderTooltip: string;
+    prescriptionRemember: string;
+    prescriptionClear: string;
 
     // Generate button
     generateRecommendations: string;
@@ -76,7 +83,9 @@ export interface Translations {
 
     // Actions
     revert: string;
+    revertTooltip: string;
     save: string;
+    saveTooltip: string;
 
     // Disclaimer
     disclaimer: string;
@@ -139,8 +148,13 @@ const en: Translations = {
     title: 'Harmonia Vision',
     subtitle: 'Personalized editor settings for visual comfort',
 
-    // Backup status
-    lastSavedSettings: 'Last saved settings',
+    // Current Settings & Snapshot
+    currentSettings: 'Current Settings',
+    currentSettingsDesc: 'Values from your settings.json',
+    snapshotStatus: 'Revert Point',
+    snapshotAutoCapture: 'Captured when panel opened - click Revert to restore',
+    snapshotUpdate: 'Update',
+    snapshotUpdateTooltip: 'Update revert point to current settings',
     size: 'Size',
     height: 'Height',
     weight: 'Weight',
@@ -170,6 +184,8 @@ const en: Translations = {
     sphereTooltip: 'Spherical power (SPH) corrects nearsightedness (-) or farsightedness (+). Found on your glasses prescription.',
     cylinder: 'Cylinder',
     cylinderTooltip: 'Cylindrical power (CYL) corrects astigmatism. Found on your glasses prescription if you have astigmatism.',
+    prescriptionRemember: 'Remember my prescription on this device',
+    prescriptionClear: 'Clear saved prescription',
 
     // Generate button
     generateRecommendations: 'Generate Recommendations',
@@ -205,7 +221,9 @@ const en: Translations = {
 
     // Actions
     revert: 'Revert',
+    revertTooltip: 'Restore settings to the revert point (your starting values)',
     save: 'Save',
+    saveTooltip: 'Apply settings and update revert point to these values',
 
     // Disclaimer
     disclaimer: 'Important Notice',
@@ -268,8 +286,13 @@ const es: Translations = {
     title: 'Harmonia Vision',
     subtitle: 'Configuracion personalizada del editor para comodidad visual',
 
-    // Backup status
-    lastSavedSettings: 'Ultima configuracion guardada',
+    // Current Settings & Snapshot
+    currentSettings: 'Configuracion Actual',
+    currentSettingsDesc: 'Valores de tu settings.json',
+    snapshotStatus: 'Punto de Reversion',
+    snapshotAutoCapture: 'Capturado al abrir el panel - clic en Revertir para restaurar',
+    snapshotUpdate: 'Actualizar',
+    snapshotUpdateTooltip: 'Actualizar punto de reversion a la configuracion actual',
     size: 'Tamano',
     height: 'Altura',
     weight: 'Peso',
@@ -299,6 +322,8 @@ const es: Translations = {
     sphereTooltip: 'Potencia esferica (ESF) corrige miopia (-) o hipermetropia (+). Se encuentra en tu receta de lentes.',
     cylinder: 'Cilindro',
     cylinderTooltip: 'Potencia cilindrica (CIL) corrige el astigmatismo. Se encuentra en tu receta si tienes astigmatismo.',
+    prescriptionRemember: 'Recordar mi receta en este dispositivo',
+    prescriptionClear: 'Borrar receta guardada',
 
     // Generate button
     generateRecommendations: 'Generar Recomendaciones',
@@ -334,7 +359,9 @@ const es: Translations = {
 
     // Actions
     revert: 'Revertir',
+    revertTooltip: 'Restaurar configuración al punto de reversión (valores iniciales)',
     save: 'Guardar',
+    saveTooltip: 'Aplicar configuración y actualizar punto de reversión',
 
     // Disclaimer
     disclaimer: 'Aviso Importante',

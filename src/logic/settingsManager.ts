@@ -33,8 +33,30 @@ export interface SettingsUpdateResult {
     error?: string;
 }
 
-// Storage key for globalState
+// Storage keys for globalState
 const SNAPSHOT_KEY = 'harmoniaVision.originalSnapshot';
+const PRESCRIPTION_KEY = 'harmoniaVision.prescription';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Prescription Types
+// ─────────────────────────────────────────────────────────────────────────────
+
+export interface VisualProfileToggles {
+    myopia: boolean;
+    astigmatism: boolean;
+    eyeStrain: boolean;
+    blurGhosting: boolean;
+    photophobia: boolean;
+    crowding: boolean;
+}
+
+export interface PrescriptionData {
+    sphere: number | null;
+    cylinder: number | null;
+    toggles?: VisualProfileToggles;
+    rememberMe: boolean;
+    savedAt?: number;
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // Settings Manager
@@ -122,6 +144,59 @@ export class SettingsManager {
             cursorWidth: config.get<number>('cursorWidth'),
             renderLineHighlight: config.get<LineHighlightType>('renderLineHighlight'),
         };
+    }
+
+    /**
+     * Gets the baseline settings for recommendations.
+     * Returns snapshot if available, otherwise current settings.
+     * This is the stable baseline that doesn't change during preview.
+     * CRITICAL: Using snapshot prevents "runaway" recommendations where
+     * previewed values become the floor for subsequent recommendations.
+     */
+    public getBaselineForRecommendations(): EditorSettingsSnapshot {
+        const snapshot = this.getSnapshot();
+        if (snapshot) {
+            return snapshot;
+        }
+        return this.readCurrentSettings();
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // Prescription Persistence
+    // ─────────────────────────────────────────────────────────────────────────
+
+    /**
+     * Gets the saved prescription from globalState.
+     * Returns null if no prescription exists or rememberMe is false.
+     */
+    public getSavedPrescription(): PrescriptionData | null {
+        const data = this._globalState.get<PrescriptionData>(PRESCRIPTION_KEY);
+        if (data && data.rememberMe) {
+            return data;
+        }
+        return null;
+    }
+
+    /**
+     * Saves prescription to globalState if rememberMe is true.
+     * Clears the prescription if rememberMe is false.
+     */
+    public async savePrescription(prescription: PrescriptionData): Promise<void> {
+        if (prescription.rememberMe) {
+            await this._globalState.update(PRESCRIPTION_KEY, {
+                ...prescription,
+                savedAt: Date.now(),
+            });
+        } else {
+            await this.clearPrescription();
+        }
+    }
+
+    /**
+     * Clears the saved prescription from globalState.
+     */
+    public async clearPrescription(): Promise<void> {
+        await this._globalState.update(PRESCRIPTION_KEY, undefined);
     }
 
     /**
