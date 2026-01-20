@@ -62,6 +62,23 @@ export function activate(context: vscode.ExtensionContext): void {
     );
     context.subscriptions.push(openStatsCommand);
 
+    // Command to expose timer state for cross-extension coordination
+    const getTimerStateCommand = vscode.commands.registerCommand(
+        'harmoniaVision.getTimerState',
+        () => {
+            if (pauseManager) {
+                const state = pauseManager.getState();
+                return {
+                    isRunning: state.isRunning && state.settings.enabled,
+                    phase: state.isOnBreak ? 'break' : 'work',
+                    timeRemaining: state.remainingSeconds
+                };
+            }
+            return { isRunning: false, phase: 'idle', timeRemaining: 0 };
+        }
+    );
+    context.subscriptions.push(getTimerStateCommand);
+
     // Track user activity for idle detection
     const activityEvents = [
         vscode.window.onDidChangeActiveTextEditor,

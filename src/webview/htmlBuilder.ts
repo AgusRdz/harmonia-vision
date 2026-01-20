@@ -551,6 +551,21 @@ export function getWebviewContent(
                     </label>
                 </div>
 
+                <!-- Timer Visibility Dropdown -->
+                <div class="p-3 rounded-lg bg-vscode-input-bg">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <span class="text-xs font-medium block">${t.pauseTimerVisibility}</span>
+                            <span class="text-[10px] text-vscode-muted">${t.pauseTimerVisibilityDesc}</span>
+                        </div>
+                        <select id="timerVisibility" class="bordered px-3 py-1.5 bg-vscode-bg rounded text-sm cursor-pointer">
+                            <option value="always">${t.pauseTimerVisibilityAlways}</option>
+                            <option value="auto" selected>${t.pauseTimerVisibilityAuto}</option>
+                            <option value="hidden">${t.pauseTimerVisibilityHidden}</option>
+                        </select>
+                    </div>
+                </div>
+
                 <!-- Take Break Now Button -->
                 <button id="takeBreakNowBtn" class="w-full py-3 px-4 bg-vscode-input-bg text-vscode-fg rounded-lg font-medium text-sm hover:opacity-80 transition-opacity flex items-center justify-center gap-2 bordered">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -797,6 +812,10 @@ export function getWebviewContent(
             if (payload.snapshotAge) snapshotAgeEl.textContent = payload.snapshotAge;
             revertBtn.disabled = !payload.hasSnapshot;
             applySettingsToSliders(payload.current);
+            // Set timer visibility dropdown
+            if (payload.timerVisibility && timerVisibilitySelect) {
+                timerVisibilitySelect.value = payload.timerVisibility;
+            }
         }
 
         generateBtn.addEventListener('click', () => {
@@ -918,6 +937,7 @@ export function getWebviewContent(
         const pauseShowStatusBar = document.getElementById('pauseShowStatusBar');
         const pauseWhenIdle = document.getElementById('pauseWhenIdle');
         const takeBreakNowBtn = document.getElementById('takeBreakNowBtn');
+        const timerVisibilitySelect = document.getElementById('timerVisibility');
 
         function updatePauseSettingsVisibility(enabled) {
             if (pauseSettingsContainer) {
@@ -1029,6 +1049,12 @@ export function getWebviewContent(
         if (takeBreakNowBtn) {
             takeBreakNowBtn.addEventListener('click', function() {
                 vscode.postMessage({ command: 'triggerPauseNow' });
+            });
+        }
+
+        if (timerVisibilitySelect) {
+            timerVisibilitySelect.addEventListener('change', function(e) {
+                vscode.postMessage({ command: 'updateTimerVisibility', payload: e.target.value });
             });
         }
 

@@ -90,6 +90,19 @@ Configure in VS Code Settings or through the Calibrator panel:
 | `harmoniaVision.pause.breakDurationSeconds` | Break duration in seconds (10-60) | `20`    |
 | `harmoniaVision.pause.showStatusBar`        | Show countdown in status bar      | `true`  |
 | `harmoniaVision.pause.pauseWhenIdle`        | Pause timer when inactive         | `true`  |
+| `harmoniaVision.statusBar.timerVisibility`  | Status bar visibility mode        | `auto`  |
+
+#### Status Bar Visibility
+
+The `timerVisibility` setting controls when the Eye Break countdown appears:
+
+| Option           | Behavior                                                       |
+| ---------------- | -------------------------------------------------------------- |
+| `always`         | Always show the status bar countdown                           |
+| `auto` (default) | Show when running, but hide if Harmonia Zen Pomodoro is active |
+| `hidden`         | Never show the status bar countdown                            |
+
+**Using with Harmonia Zen?** Both extensions default to `auto` mode. When both timers are running, Zen Pomodoro takes priority and the Eye Break timer hides to avoid status bar clutter. The Eye Break reminders still work in the background.
 
 ## Understanding Prescription Values
 

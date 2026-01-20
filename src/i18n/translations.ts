@@ -111,6 +111,11 @@ export interface Translations {
     pauseStatusOnBreak: string;
     pauseMinutes: string;
     pauseSeconds: string;
+    pauseTimerVisibility: string;
+    pauseTimerVisibilityDesc: string;
+    pauseTimerVisibilityAlways: string;
+    pauseTimerVisibilityAuto: string;
+    pauseTimerVisibilityHidden: string;
 
     // Stats
     statsSection: string;
@@ -235,6 +240,11 @@ const en: Translations = {
     pauseStatusOnBreak: 'On Break',
     pauseMinutes: 'min',
     pauseSeconds: 'sec',
+    pauseTimerVisibility: 'Status Bar Visibility',
+    pauseTimerVisibilityDesc: 'Control when timer appears in status bar',
+    pauseTimerVisibilityAlways: 'Always',
+    pauseTimerVisibilityAuto: 'Auto',
+    pauseTimerVisibilityHidden: 'Hidden',
 
     // Stats
     statsSection: 'Break Statistics',
@@ -359,6 +369,11 @@ const es: Translations = {
     pauseStatusOnBreak: 'En Descanso',
     pauseMinutes: 'min',
     pauseSeconds: 'seg',
+    pauseTimerVisibility: 'Visibilidad en Barra de Estado',
+    pauseTimerVisibilityDesc: 'Controla cuando aparece el temporizador',
+    pauseTimerVisibilityAlways: 'Siempre',
+    pauseTimerVisibilityAuto: 'Automatico',
+    pauseTimerVisibilityHidden: 'Oculto',
 
     // Stats
     statsSection: 'Estadisticas de Descansos',

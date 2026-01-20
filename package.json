@@ -24,6 +24,10 @@
       {
         "command": "harmoniaVision.openStats",
         "title": "%command.openStats%"
+      },
+      {
+        "command": "harmoniaVision.getTimerState",
+        "title": "Get Timer State (Internal)"
       }
     ],
     "configuration": {
@@ -52,6 +56,21 @@
           "type": "boolean",
           "default": true,
           "description": "%config.pause.showStatusBar%"
+        },
+        "harmoniaVision.statusBar.timerVisibility": {
+          "type": "string",
+          "enum": [
+            "always",
+            "auto",
+            "hidden"
+          ],
+          "default": "auto",
+          "description": "Controls when the Eye Break timer is shown in the status bar. 'always' shows the timer at all times, 'auto' shows only when running (and hides if Harmonia Zen Pomodoro timer has priority), 'hidden' never shows the timer.",
+          "enumDescriptions": [
+            "Always show the status bar timer",
+            "Show only when timer is running (recommended when using with Harmonia Zen)",
+            "Never show the status bar timer"
+          ]
         },
         "harmoniaVision.pause.pauseWhenIdle": {
           "type": "boolean",
@@ -106,5 +125,5 @@
     "vscode:prepublish": "npm run compile",
     "watch": "tsc -watch -p ./"
   },
-  "version": "1.3.0"
+  "version": "1.4.0"
 }

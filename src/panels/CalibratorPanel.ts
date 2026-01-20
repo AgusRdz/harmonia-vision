@@ -217,6 +217,11 @@ export class CalibratorPanel implements vscode.Disposable {
             case 'triggerPauseNow':
                 this._handleTriggerPauseNow();
                 break;
+            case 'updateTimerVisibility':
+                if (typeof message.payload === 'string') {
+                    this._handleUpdateTimerVisibility(message.payload);
+                }
+                break;
         }
     }
 
@@ -343,11 +348,17 @@ export class CalibratorPanel implements vscode.Disposable {
         });
     }
 
+    private _getTimerVisibility(): 'always' | 'auto' | 'hidden' {
+        const config = vscode.workspace.getConfiguration('harmoniaVision');
+        return config.get<'always' | 'auto' | 'hidden'>('statusBar.timerVisibility', 'auto');
+    }
+
     private _sendFullStateToWebview(): void {
         const current = this._settingsManager.readCurrentSettings();
         const snapshot = this._settingsManager.getSnapshot();
         const snapshotAge = this._settingsManager.getSnapshotAge();
         const hasSnapshot = this._settingsManager.hasSnapshot();
+        const timerVisibility = this._getTimerVisibility();
 
         this._panel.webview.postMessage({
             command: 'fullState',
@@ -356,6 +367,7 @@ export class CalibratorPanel implements vscode.Disposable {
                 snapshot,
                 snapshotAge,
                 hasSnapshot,
+                timerVisibility,
             },
         });
 
@@ -401,5 +413,13 @@ export class CalibratorPanel implements vscode.Disposable {
         }
 
         this._pauseManager.triggerBreakNow();
+    }
+
+    private async _handleUpdateTimerVisibility(visibility: string): Promise<void> {
+        if (visibility !== 'always' && visibility !== 'auto' && visibility !== 'hidden') {
+            return;
+        }
+        const config = vscode.workspace.getConfiguration('harmoniaVision');
+        await config.update('statusBar.timerVisibility', visibility, vscode.ConfigurationTarget.Global);
     }
 }

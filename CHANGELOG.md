@@ -1,5 +1,30 @@
 # Changelog
 
+## [1.4.0] - 2026-01-20
+
+### Added
+
+- **Status Bar Timer Visibility Setting**
+  - New setting `harmoniaVision.statusBar.timerVisibility` with options:
+    - `always` - Always show the status bar timer
+    - `auto` (default) - Show only when timer is running; hides if Harmonia Zen has priority
+    - `hidden` - Never show the status bar timer
+  - Dropdown control added to Eye Break Reminders section in Calibrator panel
+  - Enables clean UX when using both Harmonia Zen and Harmonia Vision together
+
+- **Cross-Extension Coordination**
+  - New internal command `harmoniaVision.getTimerState` for extension communication
+  - Automatically hides Eye Break timer when Harmonia Zen Pomodoro is active (in `auto` mode)
+  - Zen Pomodoro takes priority to avoid two timers cluttering the status bar
+
+### Improved
+
+- **Tooltips** - Clearer, more descriptive tooltips:
+  - Work interval: `Harmonia Focus - Eye Break (20-20-20) in 19:30`
+  - On break: `Harmonia Focus - Eye Break (20-20-20) in progress`
+
+---
+
 ## [1.3.0] - 2026-01-19
 
 ### Added

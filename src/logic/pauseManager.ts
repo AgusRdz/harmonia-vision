@@ -16,6 +16,14 @@ import * as vscode from 'vscode';
 import { getRandomTip } from './pauseTips';
 import { PauseStats, PauseStatsSummary } from './pauseStats';
 
+type TimerVisibility = 'always' | 'auto' | 'hidden';
+
+interface HarmoniaZenTimerState {
+    isRunning: boolean;
+    phase: string;
+    timeRemaining: number;
+}
+
 // ─────────────────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────────────────
@@ -166,7 +174,7 @@ export class PauseManager implements vscode.Disposable {
         await this._stats.recordBreakSnoozed();
         this._isOnBreak = false;
         this._remainingSeconds = 5 * 60; // 5 minutes
-        this._updateStatusBar();
+        await this._updateStatusBar();
         this._notifyStateChange();
 
         vscode.window.showInformationMessage('Harmonia Vision: Snoozed for 5 minutes.');
@@ -275,7 +283,7 @@ export class PauseManager implements vscode.Disposable {
             this._startIdleCheck();
         }
 
-        this._updateStatusBar();
+        void this._updateStatusBar();
         this._notifyStateChange();
     }
 
@@ -313,7 +321,8 @@ export class PauseManager implements vscode.Disposable {
             }
         }
 
-        this._updateStatusBar();
+        // Async call, no need to await for UI updates
+        void this._updateStatusBar();
         this._saveState();
         this._notifyStateChange();
     }
@@ -338,7 +347,7 @@ export class PauseManager implements vscode.Disposable {
                 this._stats.recordBreakDismissed();
                 this._isOnBreak = false;
                 this._remainingSeconds = this._settings.workIntervalMinutes * 60;
-                this._updateStatusBar();
+                void this._updateStatusBar();
                 this._notifyStateChange();
             } else {
                 // User closed notification - continue with break timer
@@ -349,10 +358,27 @@ export class PauseManager implements vscode.Disposable {
         });
     }
 
-    private _updateStatusBar(): void {
+    private async _updateStatusBar(): Promise<void> {
         if (!this._settings.showStatusBar || !this._settings.enabled) {
             this._statusBarItem.hide();
             return;
+        }
+
+        // Check visibility setting
+        const visibility = this._getTimerVisibility();
+
+        if (visibility === 'hidden') {
+            this._statusBarItem.hide();
+            return;
+        }
+
+        if (visibility === 'auto') {
+            // In auto mode, hide if Harmonia Zen Pomodoro is running (it has priority)
+            const zenRunning = await this._isHarmoniaZenTimerRunning();
+            if (zenRunning) {
+                this._statusBarItem.hide();
+                return;
+            }
         }
 
         const minutes = Math.floor(this._remainingSeconds / 60);
@@ -361,13 +387,13 @@ export class PauseManager implements vscode.Disposable {
 
         if (this._isOnBreak) {
             this._statusBarItem.text = `$(eye-closed) ${timeStr}`;
-            this._statusBarItem.tooltip = 'Harmonia Vision: On break - look away from the screen';
+            this._statusBarItem.tooltip = `Harmonia Focus — Eye Break (20-20-20) in progress`;
             this._statusBarItem.backgroundColor = new vscode.ThemeColor(
                 'statusBarItem.warningBackground'
             );
         } else {
             this._statusBarItem.text = `$(eye) ${timeStr}`;
-            this._statusBarItem.tooltip = 'Harmonia Vision: Time until next eye break';
+            this._statusBarItem.tooltip = `Harmonia Focus — Eye Break (20-20-20) in ${timeStr}`;
             this._statusBarItem.backgroundColor = new vscode.ThemeColor(
                 'statusBarItem.prominentBackground'
             );
@@ -376,9 +402,28 @@ export class PauseManager implements vscode.Disposable {
         this._statusBarItem.show();
     }
 
+    private _getTimerVisibility(): TimerVisibility {
+        const config = vscode.workspace.getConfiguration('harmoniaVision');
+        return config.get<TimerVisibility>('statusBar.timerVisibility', 'auto');
+    }
+
+    private async _isHarmoniaZenTimerRunning(): Promise<boolean> {
+        try {
+            const state = await vscode.commands.executeCommand<HarmoniaZenTimerState | undefined>(
+                'harmonia-zen.getTimerState'
+            );
+            // Zen timer is running if it's not idle (work, break, or longBreak phase)
+            return state?.isRunning === true && state?.phase !== 'idle';
+        } catch {
+            // Harmonia Zen not installed or command not available
+            return false;
+        }
+    }
+
     private _updateStatusBarVisibility(): void {
         if (this._settings.showStatusBar && this._settings.enabled) {
-            this._updateStatusBar();
+            // Async call, no need to await for UI visibility updates
+            void this._updateStatusBar();
         } else {
             this._statusBarItem.hide();
         }
